@@ -58,6 +58,7 @@ export default function Home() {
           >
             Documentation
           </a>
+          {/* Checking GitHub Integration */}
         </div>
       </main>
     </div>
