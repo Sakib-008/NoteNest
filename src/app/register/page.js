@@ -22,10 +22,13 @@ export default function RegisterPage() {
     const newErrors = {};
     if (!formData.fullName.trim()) newErrors.fullName = "Full name is required";
     if (!formData.email.trim()) newErrors.email = "Email is required";
-    else if (!emailRegex.test(formData.email)) newErrors.email = "Enter a valid email address";
+    else if (!emailRegex.test(formData.email))
+      newErrors.email = "Enter a valid email address";
     if (!formData.password) newErrors.password = "Password is required";
-    else if (formData.password.length < 6) newErrors.password = "At least 6 characters required";
-    if (!formData.department.trim()) newErrors.department = "Department is required";
+    else if (formData.password.length < 6)
+      newErrors.password = "At least 6 characters required";
+    if (!formData.department.trim())
+      newErrors.department = "Department is required";
     if (!formData.semester.trim()) newErrors.semester = "Semester is required";
     return newErrors;
   };
@@ -55,7 +58,15 @@ export default function RegisterPage() {
       if (response.ok) {
         setSubmitted(true);
       } else {
-        setErrors({ general: data.message || "Registration failed. Please try again." });
+        if (data.message === "Email already exists") {
+          setErrors({
+            email: "An account with this email already exists",
+          });
+        } else {
+          setErrors({
+            general: data.message || "Registration failed. Please try again.",
+          });
+        }
       }
     } catch {
       setErrors({ general: "Something went wrong. Please try again." });
@@ -625,10 +636,10 @@ export default function RegisterPage() {
             <div className="brand-mark">
               <div className="brand-icon">
                 <svg viewBox="0 0 24 24">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                  <polyline points="14 2 14 8 20 8"/>
-                  <line x1="8" y1="13" x2="16" y2="13"/>
-                  <line x1="8" y1="17" x2="13" y2="17"/>
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                  <line x1="8" y1="13" x2="16" y2="13" />
+                  <line x1="8" y1="17" x2="13" y2="17" />
                 </svg>
               </div>
               <span className="brand-name">NoteNest</span>
@@ -637,11 +648,14 @@ export default function RegisterPage() {
             <div className="hero-text">
               <p className="hero-eyebrow">Academic companion</p>
               <h1 className="hero-heading">
-                Your notes,<br />
+                Your notes,
+                <br />
                 beautifully <em>organised.</em>
               </h1>
               <p className="hero-body">
-                A quiet, focused space for every lecture, every idea, and every moment of clarity — built for students who care about their craft.
+                A quiet, focused space for every lecture, every idea, and every
+                moment of clarity — built for students who care about their
+                craft.
               </p>
             </div>
           </div>
@@ -668,12 +682,13 @@ export default function RegisterPage() {
               <div className="success-container">
                 <div className="success-icon">
                   <svg viewBox="0 0 24 24">
-                    <polyline points="20 6 9 17 4 12"/>
+                    <polyline points="20 6 9 17 4 12" />
                   </svg>
                 </div>
                 <h2 className="success-title">Welcome to NoteNest</h2>
                 <p className="success-body">
-                  Your account has been created.<br />
+                  Your account has been created.
+                  <br />
                   You're all set to start organising your academic life.
                 </p>
               </div>
@@ -695,7 +710,9 @@ export default function RegisterPage() {
 
                 <form onSubmit={handleSubmit} noValidate>
                   {/* Full Name */}
-                  <div className={`field ${formData.fullName ? "has-value" : ""} ${focused === "fullName" ? "focused" : ""} ${errors.fullName ? "error" : ""}`}>
+                  <div
+                    className={`field ${formData.fullName ? "has-value" : ""} ${focused === "fullName" ? "focused" : ""} ${errors.fullName ? "error" : ""}`}
+                  >
                     <label htmlFor="fullName">Full Name</label>
                     <input
                       id="fullName"
@@ -712,7 +729,9 @@ export default function RegisterPage() {
                   </div>
 
                   {/* Email */}
-                  <div className={`field ${formData.email ? "has-value" : ""} ${focused === "email" ? "focused" : ""} ${errors.email ? "error" : ""}`}>
+                  <div
+                    className={`field ${formData.email ? "has-value" : ""} ${focused === "email" ? "focused" : ""} ${errors.email ? "error" : ""}`}
+                  >
                     <label htmlFor="email">University Email</label>
                     <input
                       id="email"
@@ -729,7 +748,9 @@ export default function RegisterPage() {
                   </div>
 
                   {/* Password */}
-                  <div className={`field ${formData.password ? "has-value" : ""} ${focused === "password" ? "focused" : ""} ${errors.password ? "error" : ""}`}>
+                  <div
+                    className={`field ${formData.password ? "has-value" : ""} ${focused === "password" ? "focused" : ""} ${errors.password ? "error" : ""}`}
+                  >
                     <label htmlFor="password">Password</label>
                     <input
                       id="password"
@@ -747,7 +768,9 @@ export default function RegisterPage() {
 
                   {/* Department & Semester */}
                   <div className="field-row">
-                    <div className={`field ${formData.department ? "has-value" : ""} ${focused === "department" ? "focused" : ""} ${errors.department ? "error" : ""}`}>
+                    <div
+                      className={`field ${formData.department ? "has-value" : ""} ${focused === "department" ? "focused" : ""} ${errors.department ? "error" : ""}`}
+                    >
                       <label htmlFor="department">Department</label>
                       <input
                         id="department"
@@ -762,7 +785,9 @@ export default function RegisterPage() {
                       <span className="error-msg">{errors.department}</span>
                     </div>
 
-                    <div className={`field ${formData.semester ? "has-value" : ""} ${focused === "semester" ? "focused" : ""} ${errors.semester ? "error" : ""}`}>
+                    <div
+                      className={`field ${formData.semester ? "has-value" : ""} ${focused === "semester" ? "focused" : ""} ${errors.semester ? "error" : ""}`}
+                    >
                       <label htmlFor="semester">Semester</label>
                       <select
                         id="semester"
@@ -774,7 +799,9 @@ export default function RegisterPage() {
                       >
                         <option value="" disabled hidden></option>
                         {semesters.map((s) => (
-                          <option key={s} value={s}>{s} Semester</option>
+                          <option key={s} value={s}>
+                            {s} Semester
+                          </option>
                         ))}
                       </select>
                       <div className="field-underline" />
@@ -782,7 +809,11 @@ export default function RegisterPage() {
                     </div>
                   </div>
 
-                  <button type="submit" className="submit-btn" disabled={loading}>
+                  <button
+                    type="submit"
+                    className="submit-btn"
+                    disabled={loading}
+                  >
                     <span className="btn-text">
                       {loading && <span className="spinner" />}
                       {loading ? "Creating account…" : "Create Account"}
@@ -792,7 +823,9 @@ export default function RegisterPage() {
 
                 <p className="login-prompt">
                   Already have an account?{" "}
-                  <a href="/login" className="login-link">Sign in</a>
+                  <a href="/login" className="login-link">
+                    Sign in
+                  </a>
                 </p>
               </>
             )}
