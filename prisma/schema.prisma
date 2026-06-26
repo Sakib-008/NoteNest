@@ -16,3 +16,13 @@ model Student {
   semester   String
   createdAt  DateTime @default(now())
 }
+
+model Note{
+  id Int @id @default(autoincrement())
+  title String
+  courseCode String
+  department String
+  semester String
+  filePath String
+  uploadedAt DateTime @default(now())
+}
