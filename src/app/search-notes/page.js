@@ -302,6 +302,30 @@ function NoteCard({
   setRating,
   setComment,
 }) {
+  const [bookmarked, setBookmarked] = useState(false);
+
+  async function toggleBookmark(noteId) {
+    const response = await fetch("/api/bookmarks", {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify({
+        studentId: 1,
+
+        noteId,
+      }),
+    });
+
+    const data = await response.json();
+
+    alert(data.message);
+
+    setBookmarked(data.bookmarked);
+  }
+
   return (
     <div className="group bg-white border border-[#EDE8DD] rounded-sm shadow-[0_4px_16px_rgba(44,74,62,0.06)] p-6 flex flex-col gap-4 hover:shadow-[0_8px_32px_rgba(44,74,62,0.12)] hover:border-[#D4BA80] transition-all duration-200">
       {/* Top: icon + course code */}
@@ -371,6 +395,9 @@ function NoteCard({
           </button>
         </form>
         <hr />
+        <button type="button" onClick={() => toggleBookmark(note.id)}>
+          {bookmarked ? "Remove Bookmark" : "Bookmark"}
+        </button>
         <a href={`/api/notes/download/${note.id}`}>Download Notes</a>
       </div>
 
