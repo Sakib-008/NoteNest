@@ -17,12 +17,23 @@ model Student {
   createdAt  DateTime @default(now())
 }
 
-model Note{
+model Note {
+  id            Int      @id @default(autoincrement())
+  title         String
+  courseCode    String
+  department    String
+  semester      String
+  filePath      String
+  averageRating Float    @default(0)
+  uploadedAt    DateTime @default(now())
+  reviews       Review[]
+}
+
+model Review {
   id Int @id @default(autoincrement())
-  title String
-  courseCode String
-  department String
-  semester String
-  filePath String
-  uploadedAt DateTime @default(now())
+  rating Int
+  comment String
+  createdAt DateTime @default(now())
+  noteId Int
+  note Note @relation(fields: [noteId], references: [id], onDelete: Cascade)
 }

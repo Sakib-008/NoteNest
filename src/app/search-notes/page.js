@@ -9,6 +9,8 @@ export default function SearchNotes() {
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
   const [error, setError] = useState("");
+  const [rating, setRating] = useState(5);
+  const [comment, setComment] = useState("");
 
   async function fetchNotes() {
     setLoading(true);
@@ -42,6 +44,28 @@ export default function SearchNotes() {
     setNotes([]);
     setSearched(false);
     setError("");
+  }
+
+  async function submitReview(noteId) {
+    const response = await fetch("/api/reviews", {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify({
+        noteId,
+
+        rating,
+
+        comment,
+      }),
+    });
+
+    const data = await response.json();
+    alert(data.message);
+    fetchNotes();
   }
 
   return (
@@ -310,6 +334,28 @@ function NoteCard({ note }) {
             {note.semester} Semester
           </p>
         )}
+        <h4>Average Rating: {note.averageRating.toFixed(1)}</h4>
+        <form>
+          <input
+            type="number"
+            min="1"
+            max="5"
+            value={rating}
+            onChange={(e) => setRating(Number(e.target.value))}
+          />
+          <br />
+          <br />
+          <textarea
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+          />
+          <br />
+          <br />
+          <button type="button" onClick={() => submitReview(note.id)}>
+            Submit Review
+          </button>
+        </form>
+        <hr />
         <a href={`/api/notes/download/${note.id}`}>Download Notes</a>
       </div>
 
