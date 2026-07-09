@@ -8,6 +8,10 @@ export async function GET(request, { params }) {
       where: {
         id: Number(params.id),
       },
+      select: {
+        title: true,
+        filePath: true,
+      },
     });
 
     if (!note) {
