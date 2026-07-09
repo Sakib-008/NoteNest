@@ -395,10 +395,10 @@ function NoteCard({
           </button>
         </form>
         <hr />
+        <a href={`/api/notes/download/${note.id}`}>Download Notes</a>
         <button type="button" onClick={() => toggleBookmark(note.id)}>
           {bookmarked ? "Remove Bookmark" : "Bookmark"}
         </button>
-        <a href={`/api/notes/download/${note.id}`}>Download Notes</a>
       </div>
 
       {/* Divider */}
