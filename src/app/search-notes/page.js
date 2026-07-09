@@ -91,20 +91,8 @@ export default function SearchNotes() {
                   viewBox="0 0 24 24"
                   className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-4 stroke-[#B89A5A] fill-none stroke-[1.5]"
                 >
-                  <circle
-                    cx="11"
-                    cy="11"
-                    r="7"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <line
-                    x1="16.5"
-                    y1="16.5"
-                    x2="22"
-                    y2="22"
-                    strokeLinecap="round"
-                  />
+                  <circle cx="11" cy="11" r="7" strokeLinecap="round" strokeLinejoin="round" />
+                  <line x1="16.5" y1="16.5" x2="22" y2="22" strokeLinecap="round" />
                 </svg>
                 <input
                   type="text"
@@ -150,7 +138,7 @@ export default function SearchNotes() {
                 <span className="absolute inset-0 -translate-x-full bg-[#B89A5A] transition-transform duration-300 ease-out group-hover:translate-x-0" />
                 <span className="relative z-10 flex items-center gap-2">
                   {loading && (
-                    <span className="h-3 w-3 animate-spin rounded-full border-[1.5px] border-[#F7F4EE]/30 border-t-[#F7F4EE] group-hover:border-[#2C4A3E]/30 group-hover:border-t-[#2C4A3E]" />
+                    <span className="h-3 w-3 animate-spin rounded-full border-[1.5px] border-[#F7F4EE]/30 border-t-[#F7F4EE]" />
                   )}
                   {loading ? "Searching…" : "Search"}
                 </span>
@@ -177,11 +165,8 @@ export default function SearchNotes() {
                   : `${notes.length} ${notes.length === 1 ? "note" : "notes"} found`}
                 {keyword && (
                   <span>
-                    {" "}
-                    for{" "}
-                    <span className="text-[#2C4A3E] font-medium">
-                      `{keyword}`
-                    </span>
+                    {" "}for{" "}
+                    <span className="text-[#2C4A3E] font-medium">"{keyword}"</span>
                   </span>
                 )}
               </p>
@@ -199,11 +184,7 @@ export default function SearchNotes() {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   />
-                  <polyline
-                    points="14 2 14 8 20 8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
+                  <polyline points="14 2 14 8 20 8" strokeLinecap="round" strokeLinejoin="round" />
                   <line x1="9" y1="13" x2="15" y2="13" strokeLinecap="round" />
                   <line x1="9" y1="17" x2="13" y2="17" strokeLinecap="round" />
                 </svg>
@@ -242,13 +223,7 @@ export default function SearchNotes() {
               viewBox="0 0 24 24"
               className="mx-auto h-10 w-10 stroke-[#EDE8DD] fill-none stroke-[1.5] mb-4"
             >
-              <circle
-                cx="11"
-                cy="11"
-                r="7"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
+              <circle cx="11" cy="11" r="7" strokeLinecap="round" strokeLinejoin="round" />
               <line x1="16.5" y1="16.5" x2="22" y2="22" strokeLinecap="round" />
             </svg>
             <p className="text-sm text-[#C9C4B6] font-light tracking-widest">
@@ -265,23 +240,13 @@ export default function SearchNotes() {
 function NoteCard({ note }) {
   return (
     <div className="group bg-white border border-[#EDE8DD] rounded-sm shadow-[0_4px_16px_rgba(44,74,62,0.06)] p-6 flex flex-col gap-4 hover:shadow-[0_8px_32px_rgba(44,74,62,0.12)] hover:border-[#D4BA80] transition-all duration-200">
-      {/* Top: icon + course code */}
+
+      {/* Top: icon + course code badge */}
       <div className="flex items-start justify-between">
         <div className="flex h-9 w-9 items-center justify-center rounded-sm bg-[#F7F4EE] border border-[#EDE8DD] group-hover:border-[#B89A5A] transition-colors">
-          <svg
-            viewBox="0 0 24 24"
-            className="h-4 w-4 stroke-[#2C4A3E] fill-none stroke-[1.5]"
-          >
-            <path
-              d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <polyline
-              points="14 2 14 8 20 8"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
+          <svg viewBox="0 0 24 24" className="h-4 w-4 stroke-[#2C4A3E] fill-none stroke-[1.5]">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" strokeLinecap="round" strokeLinejoin="round" />
+            <polyline points="14 2 14 8 20 8" strokeLinecap="round" strokeLinejoin="round" />
             <line x1="8" y1="13" x2="16" y2="13" strokeLinecap="round" />
             <line x1="8" y1="17" x2="13" y2="17" strokeLinecap="round" />
           </svg>
@@ -294,7 +259,7 @@ function NoteCard({ note }) {
         )}
       </div>
 
-      {/* Title */}
+      {/* Title + meta */}
       <div className="flex-1">
         <h3
           className="text-base font-medium text-[#1C1C1C] leading-snug mb-1 line-clamp-2"
@@ -306,48 +271,60 @@ function NoteCard({ note }) {
           <p className="text-xs text-[#8A8A8A] font-light">{note.department}</p>
         )}
         {note.semester && (
-          <p className="text-xs text-[#8A8A8A] font-light">
-            {note.semester} Semester
-          </p>
+          <p className="text-xs text-[#8A8A8A] font-light">{note.semester} Semester</p>
         )}
-        <a href={`/api/notes/download/${note.id}`}>Download Notes</a>
+
+        
+        {note.uploadedBy && (
+          <p className="text-xs text-[#8A8A8A] font-light mt-1">by {note.uploadedBy}</p>
+          )}
+          {note.uploadedAt && (
+  <p className="text-xs text-[#C9C4B6] font-light">{new Date(note.uploadedAt).toLocaleDateString()}</p>
+)}
       </div>
 
       {/* Divider */}
       <div className="h-px bg-[#EDE8DD]" />
 
-      {/* View PDF link */}
-      <a
-        href={note.filePath}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="group/link flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-[#2C4A3E] hover:text-[#B89A5A] transition-colors"
-      >
-        <svg
-          viewBox="0 0 24 24"
-          className="h-3.5 w-3.5 stroke-current fill-none stroke-2 transition-transform group-hover/link:translate-x-0.5"
+      {/* Action row — View PDF + Download */}
+      <div className="flex items-center justify-between gap-3">
+
+        {/* View PDF — text link style */}
+        <a
+          href={note.filePath}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group/view flex items-center gap-1.5 text-xs font-medium uppercase tracking-widest text-[#557A6B] hover:text-[#2C4A3E] transition-colors"
         >
-          <path
-            d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <polyline
-            points="15 3 21 3 21 9"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <line
-            x1="10"
-            y1="14"
-            x2="21"
-            y2="3"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-        View PDF
-      </a>
+          <svg
+            viewBox="0 0 24 24"
+            className="h-3.5 w-3.5 stroke-current fill-none stroke-2 transition-transform group-hover/view:translate-x-0.5"
+          >
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" strokeLinecap="round" strokeLinejoin="round" />
+            <polyline points="15 3 21 3 21 9" strokeLinecap="round" strokeLinejoin="round" />
+            <line x1="10" y1="14" x2="21" y2="3" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          View
+        </a>
+
+        {/* Download — solid pill button */}
+        <a
+          href={`/api/notes/download/${note.id}`}
+          className="group/dl relative overflow-hidden flex items-center gap-1.5 rounded-sm bg-[#2C4A3E] px-4 py-1.5 text-[0.7rem] font-medium uppercase tracking-widest text-[#F7F4EE] hover:text-[#2C4A3E] transition-colors duration-200"
+        >
+          {/* gold sweep on hover, same as other buttons in the app */}
+          <span className="absolute inset-0 -translate-x-full bg-[#B89A5A] transition-transform duration-300 ease-out group-hover/dl:translate-x-0" />
+          <svg
+            viewBox="0 0 24 24"
+            className="relative z-10 h-3.5 w-3.5 stroke-current fill-none stroke-2 transition-transform group-hover/dl:translate-y-0.5"
+          >
+            <path d="M12 4v12M12 16l-4-4M12 16l4-4" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M4 20h16" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          <span className="relative z-10">Download</span>
+        </a>
+
+      </div>
     </div>
   );
 }
