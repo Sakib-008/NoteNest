@@ -252,7 +252,15 @@ export default function SearchNotes() {
               /* ── NOTES GRID ── */
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {notes.map((note) => (
-                  <NoteCard key={note.id} note={note} />
+                  <NoteCard
+                    key={note.id}
+                    note={note}
+                    submitReview={submitReview}
+                    rating={rating}
+                    comment={comment}
+                    setRating={setRating}
+                    setComment={setComment}
+                  />
                 ))}
               </div>
             )}
@@ -286,7 +294,14 @@ export default function SearchNotes() {
 }
 
 /* ── NOTE CARD COMPONENT ── */
-function NoteCard({ note }) {
+function NoteCard({
+  note,
+  submitReview,
+  rating,
+  comment,
+  setRating,
+  setComment,
+}) {
   return (
     <div className="group bg-white border border-[#EDE8DD] rounded-sm shadow-[0_4px_16px_rgba(44,74,62,0.06)] p-6 flex flex-col gap-4 hover:shadow-[0_8px_32px_rgba(44,74,62,0.12)] hover:border-[#D4BA80] transition-all duration-200">
       {/* Top: icon + course code */}
