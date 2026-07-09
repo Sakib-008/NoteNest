@@ -4,9 +4,11 @@ import path from "path";
 
 export async function GET(request, { params }) {
   try {
+    const { id } = await params;
+
     const note = await prisma.note.findUnique({
       where: {
-        id: Number(params.id),
+        id: Number(id),
       },
       select: {
         title: true,
