@@ -20,6 +20,14 @@ export async function GET(request, { params }) {
       });
     }
 
+    const isLoggedIn = true;
+
+    if (!isLoggedIn) {
+      return new Response("Unauthorized", {
+        status: 401,
+      });
+    }
+
     const filePath = path.join(process.cwd(), "public", note.filePath);
 
     const file = await fs.readFile(filePath);
