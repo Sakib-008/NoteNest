@@ -207,7 +207,7 @@ export default function SearchNotes() {
 
 /* ── NOTE CARD ── */
 function NoteCard({ note, onReviewSubmit }) {
-  // ✅ Each card owns its own rating/comment state — fixes the shared-state bug
+  // Each card owns its own state — fixes shared-state bug from teammate's version
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
   const [hoveredStar, setHoveredStar] = useState(0);
@@ -216,6 +216,14 @@ function NoteCard({ note, onReviewSubmit }) {
   const [reviewSuccess, setReviewSuccess] = useState(false);
   const [reviewError, setReviewError] = useState("");
 
+  // Bookmark state
+  const [bookmarked, setBookmarked] = useState(false);
+  const [bookmarkLoading, setBookmarkLoading] = useState(false);
+  const [bookmarkMsg, setBookmarkMsg] = useState("");
+
+  const avgRating = note.averageRating ?? 0;
+
+  /* ── REVIEW SUBMIT ── */
   async function submitReview() {
     if (!comment.trim()) {
       setReviewError("Please write a comment before submitting.");
@@ -248,11 +256,37 @@ function NoteCard({ note, onReviewSubmit }) {
 
   // Render filled/half/empty stars for display
   const avgRating = note.averageRating ?? 0;
+  /* ── BOOKMARK TOGGLE ── */
+  async function toggleBookmark() {
+    setBookmarkLoading(true);
+    setBookmarkMsg("");
+    try {
+      const response = await fetch("/api/bookmarks", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        // studentId: 1 kept as-is from teammate's backend contract
+        body: JSON.stringify({ studentId: 1, noteId: note.id }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setBookmarked(data.bookmarked);
+        // flash a brief confirmation label then clear it after 2s
+        setBookmarkMsg(data.bookmarked ? "Bookmarked!" : "Removed");
+        setTimeout(() => setBookmarkMsg(""), 2000);
+      } else {
+        setBookmarkMsg(data.message || "Failed. Try again.");
+      }
+    } catch {
+      setBookmarkMsg("Something went wrong.");
+    } finally {
+      setBookmarkLoading(false);
+    }
+  }
 
   return (
     <div className="group bg-white border border-[#EDE8DD] rounded-sm shadow-[0_4px_16px_rgba(44,74,62,0.06)] p-6 flex flex-col gap-4 hover:shadow-[0_8px_32px_rgba(44,74,62,0.12)] hover:border-[#D4BA80] transition-all duration-200">
 
-      {/* Top: icon + course code */}
+      {/* ── TOP ROW: doc icon + course code + bookmark ── */}
       <div className="flex items-start justify-between">
         <div className="flex h-9 w-9 items-center justify-center rounded-sm bg-[#F7F4EE] border border-[#EDE8DD] group-hover:border-[#B89A5A] transition-colors">
           <svg viewBox="0 0 24 24" className="h-4 w-4 stroke-[#2C4A3E] fill-none stroke-[1.5]">
@@ -262,14 +296,56 @@ function NoteCard({ note, onReviewSubmit }) {
             <line x1="8" y1="17" x2="13" y2="17" strokeLinecap="round" />
           </svg>
         </div>
-        {note.courseCode && (
-          <span className="text-[0.65rem] font-medium uppercase tracking-widest text-[#557A6B] bg-[#F7F4EE] border border-[#EDE8DD] px-2 py-0.5 rounded-sm">
-            {note.courseCode}
-          </span>
-        )}
+
+        {/* course code badge + bookmark side by side */}
+        <div className="flex items-center gap-2">
+          {note.courseCode && (
+            <span className="text-[0.65rem] font-medium uppercase tracking-widest text-[#557A6B] bg-[#F7F4EE] border border-[#EDE8DD] px-2 py-0.5 rounded-sm">
+              {note.courseCode}
+            </span>
+          )}
+
+          {/* ── BOOKMARK BUTTON ── */}
+          <div className="relative">
+            <button
+              type="button"
+              onClick={toggleBookmark}
+              disabled={bookmarkLoading}
+              aria-label={bookmarked ? "Remove bookmark" : "Bookmark this note"}
+              className={`flex items-center justify-center h-7 w-7 rounded-sm border transition-all duration-200 ${
+                bookmarked
+                  ? "bg-[#2C4A3E] border-[#2C4A3E]"
+                  : "bg-transparent border-[#EDE8DD] hover:border-[#B89A5A]"
+              } ${bookmarkLoading ? "opacity-50 cursor-not-allowed" : ""}`}
+            >
+              {bookmarkLoading ? (
+                /* tiny spinner while API call is in flight */
+                <span className={`h-3 w-3 animate-spin rounded-full border-[1.5px] ${bookmarked ? "border-[#F7F4EE]/30 border-t-[#F7F4EE]" : "border-[#2C4A3E]/30 border-t-[#2C4A3E]"}`} />
+              ) : (
+                <svg
+                  viewBox="0 0 24 24"
+                  className={`h-3.5 w-3.5 transition-all duration-200 ${
+                    bookmarked
+                      ? "fill-[#F7F4EE] stroke-[#F7F4EE]"
+                      : "fill-none stroke-[#8A8A8A] group-hover:stroke-[#B89A5A]"
+                  } stroke-2`}
+                >
+                  <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              )}
+            </button>
+
+            {/* ── flash confirmation tooltip ── */}
+            {bookmarkMsg && (
+              <span className="absolute -bottom-6 right-0 whitespace-nowrap text-[0.6rem] font-medium text-[#557A6B] tracking-wide">
+                {bookmarkMsg}
+              </span>
+            )}
+          </div>
+        </div>
       </div>
 
-      {/* Title + meta */}
+      {/* ── TITLE + META ── */}
       <div className="flex-1">
         <h3 className="text-base font-medium text-[#1C1C1C] leading-snug mb-1 line-clamp-2" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
           {note.title}
@@ -282,11 +358,7 @@ function NoteCard({ note, onReviewSubmit }) {
       <div className="flex items-center gap-2">
         <div className="flex items-center gap-0.5">
           {[1, 2, 3, 4, 5].map((star) => (
-            <svg
-              key={star}
-              viewBox="0 0 24 24"
-              className={`h-3.5 w-3.5 ${star <= Math.round(avgRating) ? "fill-[#B89A5A] stroke-[#B89A5A]" : "fill-none stroke-[#D4BA80]"} stroke-[1.5]`}
-            >
+            <svg key={star} viewBox="0 0 24 24" className={`h-3.5 w-3.5 ${star <= Math.round(avgRating) ? "fill-[#B89A5A] stroke-[#B89A5A]" : "fill-none stroke-[#D4BA80]"} stroke-[1.5]`}>
               <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           ))}
@@ -300,7 +372,6 @@ function NoteCard({ note, onReviewSubmit }) {
 
       {/* ── REVIEW SECTION ── */}
       <div>
-        {/* Toggle button */}
         <button
           onClick={() => { setShowReview(!showReview); setReviewSuccess(false); setReviewError(""); }}
           className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-widest text-[#557A6B] hover:text-[#2C4A3E] transition-colors"
@@ -311,7 +382,6 @@ function NoteCard({ note, onReviewSubmit }) {
           {showReview ? "Cancel" : "Leave a Review"}
         </button>
 
-        {/* Success flash */}
         {reviewSuccess && (
           <p className="mt-2 text-xs text-[#557A6B] font-medium flex items-center gap-1">
             <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 stroke-current fill-none stroke-2">
@@ -321,15 +391,10 @@ function NoteCard({ note, onReviewSubmit }) {
           </p>
         )}
 
-        {/* Review form — collapsible */}
         {showReview && (
           <div className="mt-4 flex flex-col gap-3">
-
-            {/* Star picker */}
             <div>
-              <p className="text-[0.65rem] font-medium uppercase tracking-widest text-[#3D6355] mb-2">
-                Your Rating
-              </p>
+              <p className="text-[0.65rem] font-medium uppercase tracking-widest text-[#3D6355] mb-2">Your Rating</p>
               <div className="flex items-center gap-1">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <button
@@ -341,19 +406,8 @@ function NoteCard({ note, onReviewSubmit }) {
                     className="transition-transform hover:scale-110"
                     aria-label={`Rate ${star} star${star > 1 ? "s" : ""}`}
                   >
-                    <svg
-                      viewBox="0 0 24 24"
-                      className={`h-6 w-6 stroke-[1.5] transition-colors ${
-                        star <= (hoveredStar || rating)
-                          ? "fill-[#B89A5A] stroke-[#B89A5A]"
-                          : "fill-none stroke-[#D4BA80]"
-                      }`}
-                    >
-                      <polygon
-                        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
+                    <svg viewBox="0 0 24 24" className={`h-6 w-6 stroke-[1.5] transition-colors ${star <= (hoveredStar || rating) ? "fill-[#B89A5A] stroke-[#B89A5A]" : "fill-none stroke-[#D4BA80]"}`}>
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </button>
                 ))}
@@ -363,11 +417,8 @@ function NoteCard({ note, onReviewSubmit }) {
               </div>
             </div>
 
-            {/* Comment textarea */}
             <div>
-              <p className="text-[0.65rem] font-medium uppercase tracking-widest text-[#3D6355] mb-2">
-                Comment
-              </p>
+              <p className="text-[0.65rem] font-medium uppercase tracking-widest text-[#3D6355] mb-2">Comment</p>
               <textarea
                 value={comment}
                 onChange={(e) => { setComment(e.target.value); setReviewError(""); }}
@@ -377,12 +428,8 @@ function NoteCard({ note, onReviewSubmit }) {
               />
             </div>
 
-            {/* Inline error */}
-            {reviewError && (
-              <p className="text-[0.7rem] text-[#C0392B]">{reviewError}</p>
-            )}
+            {reviewError && <p className="text-[0.7rem] text-[#C0392B]">{reviewError}</p>}
 
-            {/* Submit */}
             <button
               type="button"
               onClick={submitReview}
@@ -391,9 +438,7 @@ function NoteCard({ note, onReviewSubmit }) {
             >
               <span className="absolute inset-0 -translate-x-full bg-[#B89A5A] transition-transform duration-300 ease-out group-hover/sub:translate-x-0" />
               <span className="relative z-10 flex items-center gap-2">
-                {submitting && (
-                  <span className="h-3 w-3 animate-spin rounded-full border-[1.5px] border-[#F7F4EE]/30 border-t-[#F7F4EE]" />
-                )}
+                {submitting && <span className="h-3 w-3 animate-spin rounded-full border-[1.5px] border-[#F7F4EE]/30 border-t-[#F7F4EE]" />}
                 {submitting ? "Submitting…" : "Submit Review"}
               </span>
             </button>
@@ -403,7 +448,7 @@ function NoteCard({ note, onReviewSubmit }) {
 
       <div className="h-px bg-[#EDE8DD]" />
 
-      {/* ── ACTION ROW — View + Download ── */}
+      {/* ── ACTION ROW: View + Download ── */}
       <div className="flex items-center justify-between gap-3">
         <a
           href={note.filePath}
