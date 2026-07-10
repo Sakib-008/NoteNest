@@ -304,6 +304,7 @@ function NoteCard({
 }) {
   const [bookmarked, setBookmarked] = useState(false);
   const [question, setQuestion] = useState("");
+  const [reply, setReply] = useState("");
 
   async function toggleBookmark(noteId) {
     const response = await fetch("/api/bookmarks", {
@@ -339,6 +340,26 @@ function NoteCard({
         noteId,
 
         question,
+      }),
+    });
+
+    const data = await response.json();
+
+    alert(data.message);
+  }
+
+  async function submitReply(discussionId) {
+    const response = await fetch("/api/replies", {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify({
+        discussionId,
+
+        message: reply,
       }),
     });
 
@@ -434,10 +455,16 @@ function NoteCard({
         </button>
         <hr />
         <h4>Replies</h4>
-        <textarea placeholder="Write a reply..." />
+        <textarea
+          value={reply}
+          onChange={(e) => setReply(e.target.value)}
+          placeholder="Write a reply..."
+        />
         <br />
         <br />
-        <button type="button">Reply</button>
+        <button type="button" onClick={() => submitReply(1)}>
+          Reply
+        </button>
       </div>
 
       {/* Divider */}
