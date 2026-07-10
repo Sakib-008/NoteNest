@@ -283,6 +283,46 @@ function NoteCard({ note, onReviewSubmit }) {
     }
   }
 
+  async function postQuestion(noteId) {
+    const response = await fetch("/api/discussions", {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify({
+        noteId,
+
+        question,
+      }),
+    });
+
+    const data = await response.json();
+
+    alert(data.message);
+  }
+
+  async function submitReply(discussionId) {
+    const response = await fetch("/api/replies", {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify({
+        discussionId,
+
+        message: reply,
+      }),
+    });
+
+    const data = await response.json();
+
+    alert(data.message);
+  }
+
   return (
     <div className="group bg-white border border-[#EDE8DD] rounded-sm shadow-[0_4px_16px_rgba(44,74,62,0.06)] p-6 flex flex-col gap-4 hover:shadow-[0_8px_32px_rgba(44,74,62,0.12)] hover:border-[#D4BA80] transition-all duration-200">
 

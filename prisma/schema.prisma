@@ -29,6 +29,7 @@ model Note {
   uploadedAt    DateTime @default(now())
   reviews       Review[]
   bookmarks     Bookmark[]
+  discussions Discussion[]
 }
 
 model Review {
@@ -48,4 +49,21 @@ model Bookmark {
   student    Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
   note       Note     @relation(fields: [noteId], references: [id], onDelete: Cascade)
   @@unique([studentId, noteId])
+}
+
+model Discussion {
+  id         Int       @id @default(autoincrement())
+  question   String
+  createdAt  DateTime  @default(now())
+  noteId      Int
+  note        Note      @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  replies     Reply[]
+}
+
+model Reply {
+  id            Int       @id @default(autoincrement())
+  message       String
+  createdAt     DateTime  @default(now())
+  discussionId  Int
+  discussion    Discussion @relation(fields: [discussionId], references: [id], onDelete: Cascade)
 }
