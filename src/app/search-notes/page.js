@@ -303,6 +303,7 @@ function NoteCard({
   setComment,
 }) {
   const [bookmarked, setBookmarked] = useState(false);
+  const [question, setQuestion] = useState("");
 
   async function toggleBookmark(noteId) {
     const response = await fetch("/api/bookmarks", {
@@ -324,6 +325,26 @@ function NoteCard({
     alert(data.message);
 
     setBookmarked(data.bookmarked);
+  }
+
+  async function postQuestion(noteId) {
+    const response = await fetch("/api/discussions", {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify({
+        noteId,
+
+        question,
+      }),
+    });
+
+    const data = await response.json();
+
+    alert(data.message);
   }
 
   return (
@@ -399,6 +420,24 @@ function NoteCard({
         <button type="button" onClick={() => toggleBookmark(note.id)}>
           {bookmarked ? "Remove Bookmark" : "Bookmark"}
         </button>
+        <hr />
+        <h3>Discussion</h3>
+        <textarea
+          value={question}
+          onChange={(e) => setQuestion(e.target.value)}
+          placeholder="Ask a question..."
+        />
+        <br />
+        <br />
+        <button type="button" onClick={() => postQuestion(note.id)}>
+          Post Question
+        </button>
+        <hr />
+        <h4>Replies</h4>
+        <textarea placeholder="Write a reply..." />
+        <br />
+        <br />
+        <button type="button">Reply</button>
       </div>
 
       {/* Divider */}
