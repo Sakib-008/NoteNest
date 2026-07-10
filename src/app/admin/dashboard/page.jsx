@@ -21,7 +21,7 @@ export default function AdminDashboard() {
 
         <p>Activity information will appear here.</p>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div>
           <ActivityWidget
             title="Students"
             value="0"
