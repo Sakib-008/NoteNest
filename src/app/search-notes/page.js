@@ -221,8 +221,6 @@ function NoteCard({ note, onReviewSubmit }) {
   const [bookmarkLoading, setBookmarkLoading] = useState(false);
   const [bookmarkMsg, setBookmarkMsg] = useState("");
 
-  const avgRating = note.averageRating ?? 0;
-
   /* ── REVIEW SUBMIT ── */
   async function submitReview() {
     if (!comment.trim()) {
