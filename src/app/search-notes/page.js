@@ -243,7 +243,7 @@ function NoteCard({ note, onReviewSubmit }) {
         setComment("");
         setRating(5);
         setShowReview(false);
-        onReviewSubmit();
+        onReviewSubmit(); // refresh notes list to update averageRating
       } else {
         setReviewError(data.message || "Failed to submit review.");
       }
@@ -254,6 +254,8 @@ function NoteCard({ note, onReviewSubmit }) {
     }
   }
 
+  // Render filled/half/empty stars for display
+  const avgRating = note.averageRating ?? 0;
   /* ── BOOKMARK TOGGLE ── */
   async function toggleBookmark() {
     setBookmarkLoading(true);
