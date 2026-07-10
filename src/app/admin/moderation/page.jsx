@@ -10,6 +10,10 @@ async function getNotes() {
   return data.notes;
 }
 
+function isFlagged(note) {
+  return note.averageRating < 2 || !note.title || !note.filePath;
+}
+
 export default async function ModerationPage() {
   const notes = await getNotes();
 
@@ -28,6 +32,8 @@ export default async function ModerationPage() {
               <th>Department</th>
 
               <th>Action</th>
+
+              <th>Status</th>
             </tr>
           </thead>
 
@@ -42,6 +48,10 @@ export default async function ModerationPage() {
 
                 <td>
                   <DeleteNoteButton id={note.id} />
+                </td>
+
+                <td>
+                  {isFlagged(note) ? <span>Flagged</span> : <span>Safe</span>}
                 </td>
               </tr>
             ))}
