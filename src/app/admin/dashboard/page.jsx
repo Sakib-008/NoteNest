@@ -1,45 +1,52 @@
-import DashboardCard from "@/components/admin/DashboardCard";
 import ActivityWidget from "@/components/admin/ActivityWidget";
 
-export default function AdminDashboard() {
+async function getDashboardData() {
+  const res = await fetch("http://localhost:3000/api/admin/dashboard", {
+    cache: "no-store",
+  });
+
+  const json = await res.json();
+
+  return json.data;
+}
+
+export default async function AdminDashboard() {
+  const data = await getDashboardData();
+
   return (
     <div>
       <h1>Admin Dashboard</h1>
 
       <div>
-        <DashboardCard title="Total Students" value="0" />
+        <ActivityWidget
+          title="Students"
+          value={data.totalStudents}
+          description="Registered users"
+        />
 
-        <DashboardCard title="Total Notes" value="0" />
+        <ActivityWidget
+          title="Notes"
+          value={data.totalNotes}
+          description="Uploaded notes"
+        />
 
-        <DashboardCard title="Total Reviews" value="0" />
+        <ActivityWidget
+          title="Reviews"
+          value={data.totalReviews}
+          description="User feedback"
+        />
 
-        <DashboardCard title="Discussions" value="0" />
-      </div>
+        <ActivityWidget
+          title="Discussions"
+          value={data.totalDiscussions}
+          description="Questions"
+        />
 
-      <div>
-        <h2>Platform Activity</h2>
-
-        <p>Activity information will appear here.</p>
-
-        <div>
-          <ActivityWidget
-            title="Students"
-            value="0"
-            description="Registered users"
-          />
-
-          <ActivityWidget
-            title="Notes"
-            value="0"
-            description="Shared resources"
-          />
-
-          <ActivityWidget
-            title="Community"
-            value="0"
-            description="Discussions and replies"
-          />
-        </div>
+        <ActivityWidget
+          title="Replies"
+          value={data.totalReplies}
+          description="Community responses"
+        />
       </div>
     </div>
   );
