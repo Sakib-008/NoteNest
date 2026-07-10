@@ -27,3 +27,30 @@ export async function GET() {
     );
   }
 }
+
+export async function DELETE(request) {
+  try {
+    const body = await request.json();
+
+    const { id } = body;
+
+    await prisma.note.delete({
+      where: {
+        id: Number(id),
+      },
+    });
+
+    return NextResponse.json({
+      message: "Content removed successfully",
+    });
+  } catch (error) {
+    return NextResponse.json(
+      {
+        message: "Delete failed",
+      },
+      {
+        status: 500,
+      },
+    );
+  }
+}

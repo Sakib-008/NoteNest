@@ -1,3 +1,5 @@
+import DeleteNoteButton from "@/components/admin/DeleteNoteButton";
+
 async function getNotes() {
   const res = await fetch("http://localhost:3000/api/admin/moderation", {
     cache: "no-store",
@@ -39,7 +41,7 @@ export default async function ModerationPage() {
                 <td>{note.department}</td>
 
                 <td>
-                  <button>Remove</button>
+                  <DeleteNoteButton id={note.id} />
                 </td>
               </tr>
             ))}
