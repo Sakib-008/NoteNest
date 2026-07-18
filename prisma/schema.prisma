@@ -8,62 +8,66 @@ datasource db {
 }
 
 model Student {
-  id         Int      @id @default(autoincrement())
+  id         Int        @id @default(autoincrement())
   fullName   String
-  email      String   @unique
+  email      String     @unique
   password   String
   department String
   semester   String
-  createdAt  DateTime @default(now())
+  createdAt  DateTime   @default(now())
   bookmarks  Bookmark[]
+  notes      Note[]
 }
 
 model Note {
-  id            Int      @id @default(autoincrement())
+  id            Int          @id @default(autoincrement())
   title         String
   courseCode    String
   department    String
   semester      String
   filePath      String
-  averageRating Float    @default(0)
-  uploadedAt    DateTime @default(now())
+  averageRating Float        @default(0)
+  uploadedAt    DateTime     @default(now())
+  uploaderId    Int?
+  uploader      Student?     @relation(fields: [uploaderId], references: [id], onDelete: Cascade)
   reviews       Review[]
   bookmarks     Bookmark[]
-  discussions Discussion[]
+  discussions   Discussion[]
 }
 
 model Review {
-  id         Int      @id @default(autoincrement())
-  rating     Int
-  comment    String
-  createdAt  DateTime @default(now())
-  noteId     Int
-  note        Note    @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  id        Int      @id @default(autoincrement())
+  rating    Int
+  comment   String
+  createdAt DateTime @default(now())
+  noteId    Int
+  note      Note     @relation(fields: [noteId], references: [id], onDelete: Cascade)
 }
 
 model Bookmark {
-  id         Int      @id @default(autoincrement())
-  studentId  Int
-  noteId     Int
-  createdAt  DateTime @default(now())
-  student    Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  note       Note     @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  id        Int      @id @default(autoincrement())
+  studentId Int
+  noteId    Int
+  createdAt DateTime @default(now())
+  student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  note      Note     @relation(fields: [noteId], references: [id], onDelete: Cascade)
+
   @@unique([studentId, noteId])
 }
 
 model Discussion {
-  id         Int       @id @default(autoincrement())
-  question   String
-  createdAt  DateTime  @default(now())
-  noteId      Int
-  note        Note      @relation(fields: [noteId], references: [id], onDelete: Cascade)
-  replies     Reply[]
+  id        Int      @id @default(autoincrement())
+  question  String
+  createdAt DateTime @default(now())
+  noteId    Int
+  note      Note     @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  replies   Reply[]
 }
 
 model Reply {
-  id            Int       @id @default(autoincrement())
-  message       String
-  createdAt     DateTime  @default(now())
-  discussionId  Int
-  discussion    Discussion @relation(fields: [discussionId], references: [id], onDelete: Cascade)
+  id           Int        @id @default(autoincrement())
+  message      String
+  createdAt    DateTime   @default(now())
+  discussionId Int
+  discussion   Discussion @relation(fields: [discussionId], references: [id], onDelete: Cascade)
 }
