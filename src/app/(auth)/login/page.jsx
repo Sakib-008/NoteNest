@@ -75,7 +75,7 @@ export default function LoginPage() {
       if (response.ok) {
         localStorage.setItem("student", JSON.stringify(data.student));
 
-        router.push("/");
+        router.push("/search-notes");
       } else {
         setErrors({
           general: data.message,

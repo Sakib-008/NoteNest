@@ -1,4 +1,5 @@
 import StudentNavbar from "@/components/StudentNavbar";
+import StudentFooter from "@/components/StudentFooter";
 import AuthGuard from "@/components/AuthGuard";
 
 export default function StudentLayout({ children }) {
@@ -7,6 +8,8 @@ export default function StudentLayout({ children }) {
       <StudentNavbar />
 
       <main>{children}</main>
+
+      <StudentFooter />
     </AuthGuard>
   );
 }

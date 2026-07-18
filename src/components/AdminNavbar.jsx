@@ -36,18 +36,6 @@ font-bold
         <Link href="/admin/dashboard">Dashboard</Link>
 
         <Link href="/admin/moderation">Content Moderation</Link>
-
-        <button
-          onClick={logout}
-          className="
-bg-red-500
-px-4
-py-2
-rounded
-"
-        >
-          Logout
-        </button>
       </div>
     </nav>
   );

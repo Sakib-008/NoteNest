@@ -34,9 +34,7 @@ text-blue-600
       </h1>
 
       <div className="flex gap-6">
-        <Link href="/">Home</Link>
-
-        <Link href="/search-notes">Search Notes</Link>
+        <Link href="/search-notes">Home</Link>
 
         <Link href="/upload-notes">Upload Notes</Link>
 
