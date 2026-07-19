@@ -385,25 +385,318 @@ function NoteCard({ note, onReviewSubmit }) {
 
       {/* ── TITLE + META ── */}
       <div className="flex-1">
-        <h3 className="text-base font-medium text-[#1C1C1C] leading-snug mb-1 line-clamp-2" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+        <h3
+          className="
+    text-lg
+    font-medium
+    text-[#1C1C1C]
+    leading-snug
+    mb-2
+    line-clamp-2
+    "
+          style={{ fontFamily: "'Cormorant Garamond', serif" }}
+        >
           {note.title}
         </h3>
-        {note.department && <p className="text-xs text-[#8A8A8A] font-light">{note.department}</p>}
-        {note.semester && <p className="text-xs text-[#8A8A8A] font-light">{note.semester} Semester</p>}
-      </div>
 
-      {/* ── AVERAGE RATING DISPLAY ── */}
-      <div className="flex items-center gap-2">
-        <div className="flex items-center gap-0.5">
-          {[1, 2, 3, 4, 5].map((star) => (
-            <svg key={star} viewBox="0 0 24 24" className={`h-3.5 w-3.5 ${star <= Math.round(avgRating) ? "fill-[#B89A5A] stroke-[#B89A5A]" : "fill-none stroke-[#D4BA80]"} stroke-[1.5]`}>
-              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          ))}
+        <div className="space-y-1 mb-4">
+          {note.department && (
+            <p className="text-xs text-[#8A8A8A] font-light">
+              Department: {note.department}
+            </p>
+          )}
+
+          {note.semester && (
+            <p className="text-xs text-[#8A8A8A] font-light">
+              Semester: {note.semester}
+            </p>
+          )}
         </div>
-        <span className="text-xs text-[#8A8A8A] font-light">
-          {avgRating > 0 ? avgRating.toFixed(1) : "No ratings yet"}
-        </span>
+
+        {/* Rating */}
+
+        <div
+          className="
+    mb-5
+    rounded-xl
+    border
+    border-[#EDE8DD]
+    bg-[#FBFAF6]
+    p-4
+    "
+        >
+          <p
+            className="
+      text-xs
+      uppercase
+      tracking-[0.16em]
+      text-[#557A6B]
+      mb-2
+      "
+          >
+            Average Rating
+          </p>
+
+          <p
+            className="
+      text-2xl
+      font-semibold
+      text-[#2C4A3E]
+      "
+          >
+            {note.averageRating.toFixed(1)}
+            <span className="text-sm text-[#8A8A8A]"> / 5</span>
+          </p>
+        </div>
+
+        {/* Review Form */}
+
+        <div
+          className="
+    mb-6
+    rounded-xl
+    border
+    border-[#EDE8DD]
+    bg-white
+    p-5
+    "
+        >
+          <h4
+            className="
+      text-sm
+      font-medium
+      text-[#2C4A3E]
+      mb-4
+      "
+          >
+            Write a Review
+          </h4>
+
+          <input
+            type="number"
+            min="1"
+            max="5"
+            value={rating}
+            onChange={(e) => setRating(Number(e.target.value))}
+            className="
+      w-full
+      rounded-xl
+      border
+      border-[#EDE8DD]
+      px-4
+      py-3
+      text-sm
+      outline-none
+      focus:border-[#2C4A3E]
+      focus:ring-4
+      focus:ring-[#2C4A3E]/10
+      mb-3
+      "
+            placeholder="Rating (1-5)"
+          />
+
+          <textarea
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            placeholder="Share your feedback..."
+            className="
+      w-full
+      min-h-28
+      rounded-xl
+      border
+      border-[#EDE8DD]
+      px-4
+      py-3
+      text-sm
+      outline-none
+      resize-none
+      focus:border-[#2C4A3E]
+      focus:ring-4
+      focus:ring-[#2C4A3E]/10
+      "
+          />
+
+          <button
+            type="button"
+            onClick={() => submitReview(note.id)}
+            className="
+      mt-4
+      rounded-xl
+      bg-[#2C4A3E]
+      px-5
+      py-2.5
+      text-sm
+      font-medium
+      text-[#F7F4EE]
+      hover:bg-[#3D6355]
+      transition
+      "
+          >
+            Submit Review
+          </button>
+        </div>
+
+        {/* Actions */}
+
+        <div
+          className="
+    flex
+    flex-wrap
+    gap-3
+    mb-6
+    "
+        >
+          <a
+            href={`/api/notes/download/${note.id}`}
+            className="
+      rounded-xl
+      bg-[#2C4A3E]
+      px-5
+      py-2.5
+      text-sm
+      font-medium
+      text-[#F7F4EE]
+      hover:bg-[#3D6355]
+      transition
+      "
+          >
+            Download Notes
+          </a>
+
+          <button
+            type="button"
+            onClick={() => toggleBookmark(note.id)}
+            className="
+      rounded-xl
+      border
+      border-[#B89A5A]
+      px-5
+      py-2.5
+      text-sm
+      font-medium
+      text-[#2C4A3E]
+      hover:bg-[#F7F4EE]
+      transition
+      "
+          >
+            {bookmarked ? "Remove Bookmark" : "Bookmark"}
+          </button>
+        </div>
+
+        {/* Discussion */}
+
+        <div
+          className="
+    border-t
+    border-[#EDE8DD]
+    pt-6
+    "
+        >
+          <h3
+            className="
+      text-lg
+      font-medium
+      text-[#1C1C1C]
+      mb-4
+      "
+            style={{ fontFamily: "'Cormorant Garamond', serif" }}
+          >
+            Discussion
+          </h3>
+
+          <textarea
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+            placeholder="Ask a question..."
+            className="
+      w-full
+      min-h-24
+      rounded-xl
+      border
+      border-[#EDE8DD]
+      px-4
+      py-3
+      text-sm
+      outline-none
+      resize-none
+      focus:border-[#2C4A3E]
+      focus:ring-4
+      focus:ring-[#2C4A3E]/10
+      "
+          />
+
+          <button
+            type="button"
+            onClick={() => postQuestion(note.id)}
+            className="
+      mt-3
+      rounded-xl
+      bg-[#B89A5A]
+      px-5
+      py-2.5
+      text-sm
+      font-medium
+      text-white
+      hover:bg-[#D4BA80]
+      transition
+      "
+          >
+            Post Question
+          </button>
+
+          <div className="mt-6">
+            <h4
+              className="
+        text-sm
+        font-medium
+        text-[#2C4A3E]
+        mb-3
+        "
+            >
+              Replies
+            </h4>
+
+            <textarea
+              value={reply}
+              onChange={(e) => setReply(e.target.value)}
+              placeholder="Write a reply..."
+              className="
+        w-full
+        min-h-24
+        rounded-xl
+        border
+        border-[#EDE8DD]
+        px-4
+        py-3
+        text-sm
+        outline-none
+        resize-none
+        focus:border-[#2C4A3E]
+        focus:ring-4
+        focus:ring-[#2C4A3E]/10
+        "
+            />
+
+            <button
+              type="button"
+              onClick={() => submitReply(1)}
+              className="
+        mt-3
+        rounded-xl
+        bg-[#2C4A3E]
+        px-5
+        py-2.5
+        text-sm
+        font-medium
+        text-[#F7F4EE]
+        hover:bg-[#3D6355]
+        transition
+        "
+            >
+              Reply
+            </button>
+          </div>
+        </div>
       </div>
 
       <div className="h-px bg-[#EDE8DD]" />

@@ -14,7 +14,7 @@ export default function AdminNavbar() {
 
   function logout() {
     localStorage.removeItem("student");
-    router.push("/login");
+    router.push("/admin-login");
   }
 
   return (
