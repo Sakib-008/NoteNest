@@ -402,69 +402,317 @@ function NoteCard({
       {/* Title */}
       <div className="flex-1">
         <h3
-          className="text-base font-medium text-[#1C1C1C] leading-snug mb-1 line-clamp-2"
+          className="
+    text-lg
+    font-medium
+    text-[#1C1C1C]
+    leading-snug
+    mb-2
+    line-clamp-2
+    "
           style={{ fontFamily: "'Cormorant Garamond', serif" }}
         >
           {note.title}
         </h3>
-        {note.department && (
-          <p className="text-xs text-[#8A8A8A] font-light">{note.department}</p>
-        )}
-        {note.semester && (
-          <p className="text-xs text-[#8A8A8A] font-light">
-            {note.semester} Semester
+
+        <div className="space-y-1 mb-4">
+          {note.department && (
+            <p className="text-xs text-[#8A8A8A] font-light">
+              Department: {note.department}
+            </p>
+          )}
+
+          {note.semester && (
+            <p className="text-xs text-[#8A8A8A] font-light">
+              Semester: {note.semester}
+            </p>
+          )}
+        </div>
+
+        {/* Rating */}
+
+        <div
+          className="
+    mb-5
+    rounded-xl
+    border
+    border-[#EDE8DD]
+    bg-[#FBFAF6]
+    p-4
+    "
+        >
+          <p
+            className="
+      text-xs
+      uppercase
+      tracking-[0.16em]
+      text-[#557A6B]
+      mb-2
+      "
+          >
+            Average Rating
           </p>
-        )}
-        <h4>Average Rating: {note.averageRating.toFixed(1)}</h4>
-        <form>
+
+          <p
+            className="
+      text-2xl
+      font-semibold
+      text-[#2C4A3E]
+      "
+          >
+            {note.averageRating.toFixed(1)}
+            <span className="text-sm text-[#8A8A8A]"> / 5</span>
+          </p>
+        </div>
+
+        {/* Review Form */}
+
+        <div
+          className="
+    mb-6
+    rounded-xl
+    border
+    border-[#EDE8DD]
+    bg-white
+    p-5
+    "
+        >
+          <h4
+            className="
+      text-sm
+      font-medium
+      text-[#2C4A3E]
+      mb-4
+      "
+          >
+            Write a Review
+          </h4>
+
           <input
             type="number"
             min="1"
             max="5"
             value={rating}
             onChange={(e) => setRating(Number(e.target.value))}
+            className="
+      w-full
+      rounded-xl
+      border
+      border-[#EDE8DD]
+      px-4
+      py-3
+      text-sm
+      outline-none
+      focus:border-[#2C4A3E]
+      focus:ring-4
+      focus:ring-[#2C4A3E]/10
+      mb-3
+      "
+            placeholder="Rating (1-5)"
           />
-          <br />
-          <br />
+
           <textarea
             value={comment}
             onChange={(e) => setComment(e.target.value)}
+            placeholder="Share your feedback..."
+            className="
+      w-full
+      min-h-28
+      rounded-xl
+      border
+      border-[#EDE8DD]
+      px-4
+      py-3
+      text-sm
+      outline-none
+      resize-none
+      focus:border-[#2C4A3E]
+      focus:ring-4
+      focus:ring-[#2C4A3E]/10
+      "
           />
-          <br />
-          <br />
-          <button type="button" onClick={() => submitReview(note.id)}>
+
+          <button
+            type="button"
+            onClick={() => submitReview(note.id)}
+            className="
+      mt-4
+      rounded-xl
+      bg-[#2C4A3E]
+      px-5
+      py-2.5
+      text-sm
+      font-medium
+      text-[#F7F4EE]
+      hover:bg-[#3D6355]
+      transition
+      "
+          >
             Submit Review
           </button>
-        </form>
-        <hr />
-        <a href={`/api/notes/download/${note.id}`}>Download Notes</a>
-        <button type="button" onClick={() => toggleBookmark(note.id)}>
-          {bookmarked ? "Remove Bookmark" : "Bookmark"}
-        </button>
-        <hr />
-        <h3>Discussion</h3>
-        <textarea
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
-          placeholder="Ask a question..."
-        />
-        <br />
-        <br />
-        <button type="button" onClick={() => postQuestion(note.id)}>
-          Post Question
-        </button>
-        <hr />
-        <h4>Replies</h4>
-        <textarea
-          value={reply}
-          onChange={(e) => setReply(e.target.value)}
-          placeholder="Write a reply..."
-        />
-        <br />
-        <br />
-        <button type="button" onClick={() => submitReply(1)}>
-          Reply
-        </button>
+        </div>
+
+        {/* Actions */}
+
+        <div
+          className="
+    flex
+    flex-wrap
+    gap-3
+    mb-6
+    "
+        >
+          <a
+            href={`/api/notes/download/${note.id}`}
+            className="
+      rounded-xl
+      bg-[#2C4A3E]
+      px-5
+      py-2.5
+      text-sm
+      font-medium
+      text-[#F7F4EE]
+      hover:bg-[#3D6355]
+      transition
+      "
+          >
+            Download Notes
+          </a>
+
+          <button
+            type="button"
+            onClick={() => toggleBookmark(note.id)}
+            className="
+      rounded-xl
+      border
+      border-[#B89A5A]
+      px-5
+      py-2.5
+      text-sm
+      font-medium
+      text-[#2C4A3E]
+      hover:bg-[#F7F4EE]
+      transition
+      "
+          >
+            {bookmarked ? "Remove Bookmark" : "Bookmark"}
+          </button>
+        </div>
+
+        {/* Discussion */}
+
+        <div
+          className="
+    border-t
+    border-[#EDE8DD]
+    pt-6
+    "
+        >
+          <h3
+            className="
+      text-lg
+      font-medium
+      text-[#1C1C1C]
+      mb-4
+      "
+            style={{ fontFamily: "'Cormorant Garamond', serif" }}
+          >
+            Discussion
+          </h3>
+
+          <textarea
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+            placeholder="Ask a question..."
+            className="
+      w-full
+      min-h-24
+      rounded-xl
+      border
+      border-[#EDE8DD]
+      px-4
+      py-3
+      text-sm
+      outline-none
+      resize-none
+      focus:border-[#2C4A3E]
+      focus:ring-4
+      focus:ring-[#2C4A3E]/10
+      "
+          />
+
+          <button
+            type="button"
+            onClick={() => postQuestion(note.id)}
+            className="
+      mt-3
+      rounded-xl
+      bg-[#B89A5A]
+      px-5
+      py-2.5
+      text-sm
+      font-medium
+      text-white
+      hover:bg-[#D4BA80]
+      transition
+      "
+          >
+            Post Question
+          </button>
+
+          <div className="mt-6">
+            <h4
+              className="
+        text-sm
+        font-medium
+        text-[#2C4A3E]
+        mb-3
+        "
+            >
+              Replies
+            </h4>
+
+            <textarea
+              value={reply}
+              onChange={(e) => setReply(e.target.value)}
+              placeholder="Write a reply..."
+              className="
+        w-full
+        min-h-24
+        rounded-xl
+        border
+        border-[#EDE8DD]
+        px-4
+        py-3
+        text-sm
+        outline-none
+        resize-none
+        focus:border-[#2C4A3E]
+        focus:ring-4
+        focus:ring-[#2C4A3E]/10
+        "
+            />
+
+            <button
+              type="button"
+              onClick={() => submitReply(1)}
+              className="
+        mt-3
+        rounded-xl
+        bg-[#2C4A3E]
+        px-5
+        py-2.5
+        text-sm
+        font-medium
+        text-[#F7F4EE]
+        hover:bg-[#3D6355]
+        transition
+        "
+            >
+              Reply
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Divider */}
