@@ -14,8 +14,10 @@ model Student {
   password   String
   department String
   semester   String
+  role String @default("student")
   createdAt  DateTime @default(now())
   bookmarks  Bookmark[]
+  notes      Note[]
 }
 
 model Note {
@@ -27,6 +29,8 @@ model Note {
   filePath      String
   averageRating Float    @default(0)
   uploadedAt    DateTime @default(now())
+  uploaderId    Int?
+  uploader      Student?     @relation(fields: [uploaderId], references: [id], onDelete: Cascade)
   reviews       Review[]
   bookmarks     Bookmark[]
   discussions Discussion[]
@@ -66,4 +70,12 @@ model Reply {
   createdAt     DateTime  @default(now())
   discussionId  Int
   discussion    Discussion @relation(fields: [discussionId], references: [id], onDelete: Cascade)
+}
+
+model Admin {
+  id         Int      @id @default(autoincrement())
+  fullName   String
+  email      String   @unique
+  password   String
+  createdAt  DateTime @default(now())
 }

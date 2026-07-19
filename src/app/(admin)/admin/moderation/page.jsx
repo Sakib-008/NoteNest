@@ -1,12 +1,14 @@
 import DeleteNoteButton from "@/components/admin/DeleteNoteButton";
-import AdminNavbar from "@/components/admin/AdminNavbar";
-import AdminFooter from "@/components/admin/AdminFooter";
+import { prisma } from "@/lib/prisma";
 
 async function getNotes() {
-  const res = await fetch("/api/admin/moderation", { cache: "no-store" });
-  if (!res.ok) throw new Error("Failed to load moderation notes");
-  const data = await res.json();
-  return data.notes;
+  const notes = await prisma.note.findMany({
+    orderBy: {
+      uploadedAt: "desc",
+    },
+  });
+
+  return notes;
 }
 
 function isFlagged(note) {
@@ -23,8 +25,6 @@ export default async function ModerationPage() {
 
   return (
     <div className="flex min-h-screen flex-col bg-[#F7F4EE]">
-      <AdminNavbar />
-
       <main className="relative flex-1 px-4 py-10 sm:px-6 lg:px-8">
         <div
           className="pointer-events-none fixed inset-x-0 top-0 h-40 opacity-[0.06]"
@@ -49,8 +49,8 @@ export default async function ModerationPage() {
                   Content Moderation
                 </h1>
                 <p className="mt-2 max-w-2xl text-sm font-light text-[#8A8A8A]">
-                  Review uploaded notes and remove entries that do not meet
-                  the quality threshold or are missing required content.
+                  Review uploaded notes and remove entries that do not meet the
+                  quality threshold or are missing required content.
                 </p>
               </div>
 
@@ -155,8 +155,6 @@ export default async function ModerationPage() {
           </div>
         </div>
       </main>
-
-      <AdminFooter />
     </div>
   );
 }

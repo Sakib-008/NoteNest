@@ -1,6 +1,4 @@
 import ActivityWidget from "@/components/admin/ActivityWidget";
-import AdminNavbar from "@/components/admin/AdminNavbar";
-import AdminFooter from "@/components/admin/AdminFooter";
 
 async function getDashboardData() {
   const res = await fetch("http://localhost:3000/api/admin/dashboard", {
@@ -57,17 +55,40 @@ export default async function AdminDashboard() {
   const data = await getDashboardData();
 
   const stats = [
-    { title: "Students", value: data.totalStudents, description: "Registered users", icon: icons.students },
-    { title: "Notes", value: data.totalNotes, description: "Uploaded notes", icon: icons.notes },
-    { title: "Reviews", value: data.totalReviews, description: "User feedback", icon: icons.reviews },
-    { title: "Discussions", value: data.totalDiscussions, description: "Questions", icon: icons.discussions },
-    { title: "Replies", value: data.totalReplies, description: "Community responses", icon: icons.replies },
+    {
+      title: "Students",
+      value: data.totalStudents,
+      description: "Registered users",
+      icon: icons.students,
+    },
+    {
+      title: "Notes",
+      value: data.totalNotes,
+      description: "Uploaded notes",
+      icon: icons.notes,
+    },
+    {
+      title: "Reviews",
+      value: data.totalReviews,
+      description: "User feedback",
+      icon: icons.reviews,
+    },
+    {
+      title: "Discussions",
+      value: data.totalDiscussions,
+      description: "Questions",
+      icon: icons.discussions,
+    },
+    {
+      title: "Replies",
+      value: data.totalReplies,
+      description: "Community responses",
+      icon: icons.replies,
+    },
   ];
 
   return (
     <div className="flex min-h-screen flex-col bg-[#F7F4EE]">
-      <AdminNavbar />
-
       <main className="relative flex-1 px-4 py-10 sm:px-6 lg:px-8">
         <div
           className="pointer-events-none fixed inset-x-0 top-0 h-40 opacity-[0.06]"
@@ -118,8 +139,6 @@ export default async function AdminDashboard() {
           </div>
         </div>
       </main>
-
-      <AdminFooter />
     </div>
   );
 }
